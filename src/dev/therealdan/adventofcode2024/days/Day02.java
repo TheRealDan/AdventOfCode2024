@@ -2,6 +2,7 @@ package dev.therealdan.adventofcode2024.days;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +13,8 @@ public class Day02 {
     public Day02(String path) throws FileNotFoundException {
         File file = new File(path);
         int part1 = part1(file);
-        System.out.println("Day 2: Part 1: " + part1);
+        int part2 = part2(file);
+        System.out.println("Day 2: Part 1: " + part1 + " Part 2: " + part2);
     }
 
     public int part1(File file) throws FileNotFoundException {
@@ -24,6 +26,30 @@ public class Day02 {
             List<Integer> report = Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
             if (isSafe(report))
                 safeReports++;
+        }
+
+        return safeReports;
+    }
+
+    public int part2(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+
+        int safeReports = 0;
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            List<Integer> report = Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+            if (isSafe(report)) {
+                safeReports++;
+            } else {
+                for (int i = 0; i < report.size(); i++) {
+                    List<Integer> problemDampener = new ArrayList<>(report);
+                    problemDampener.remove(i);
+                    if (isSafe(problemDampener)) {
+                        safeReports++;
+                        break;
+                    }
+                }
+            }
         }
 
         return safeReports;
