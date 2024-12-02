@@ -1,4 +1,4 @@
-package days;
+package dev.therealdan.adventofcode2024.days;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class Day01 {
 
-    public Day01() throws FileNotFoundException {
-        File file = new File("data/day01.txt");
+    public Day01(String path) throws FileNotFoundException {
+        File file = new File(path);
         int part1 = part1(file);
         int part2 = part2(file);
         System.out.println("Day 1: Part 1: " + part1 + " Part 2: " + part2);
