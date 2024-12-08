@@ -11,7 +11,8 @@ public class Day06 {
     public Day06(String path) throws FileNotFoundException {
         File file = new File(path);
         int part1 = part1(file);
-        System.out.println("Day 6: Part 1: " + part1);
+        int part2 = part2(file);
+        System.out.println("Day 6: Part 1: " + part1 + " Part 2: " + part2);
     }
 
     public int part1(File file) throws FileNotFoundException {
@@ -51,6 +52,62 @@ public class Day06 {
         return visited;
     }
 
+    public int part2(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+
+        List<Square> squares = new ArrayList<>();
+        Guard guard = null;
+        int x = 0, y = 0;
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            for (String letter : line.split("")) {
+                squares.add(new Square(x, y, letter.equals("#")));
+                if (letter.equals("^")) guard = new Guard(x, y);
+                x++;
+            }
+            x = 0;
+            y++;
+        }
+        Square start = new Square(guard.x, guard.y, false);
+
+        while (getSquare(squares, guard.x, guard.y) != null) {
+            Square currentSquare = getSquare(squares, guard.x, guard.y);
+            currentSquare.setVisited();
+            Square nextSquare = guard.getNextSquare(squares);
+            if (nextSquare == null) break;
+            if (nextSquare.obstacle) {
+                guard.rotate();
+                continue;
+            }
+            guard.setPosition(nextSquare);
+        }
+
+        int possibleObstructions = 0;
+        for (Square square : squares) {
+            if (!square.visited) continue;
+            if (square.is(start)) continue;
+            Square rock = new Square(square.x, square.y, true);
+            guard.reset(start);
+            guard.clearHistory();
+            while (true) {
+                if (guard.dejavu()) {
+                    possibleObstructions++;
+                    break;
+                }
+                Square nextSquare = guard.getNextSquare(squares);
+                if (nextSquare == null) break;
+                if (nextSquare.obstacle || nextSquare.is(rock)) {
+                    guard.rotate();
+                    continue;
+                }
+                guard.addHistory();
+                guard.setPosition(nextSquare);
+            }
+        }
+
+        return possibleObstructions;
+    }
+
     public Square getSquare(List<Square> squares, int x, int y) {
         for (Square square : squares)
             if (square.x == x && square.y == y)
@@ -70,16 +127,34 @@ public class Day06 {
         public int x;
         public int y;
         public Direction direction;
+        public List<Guard> history = new ArrayList<>();
 
         public Guard(int x, int y) {
+            this(x, y, Direction.UP);
+        }
+
+        public Guard(int x, int y, Direction direction) {
             this.x = x;
             this.y = y;
-            direction = Direction.UP;
+            this.direction = direction;
+        }
+
+        public void reset(Square square) {
+            setPosition(square);
+            this.direction = Direction.UP;
         }
 
         public void setPosition(Square square) {
             this.x = square.x;
             this.y = square.y;
+        }
+
+        public void addHistory() {
+            this.history.add(new Guard(x, y, direction));
+        }
+
+        public void clearHistory() {
+            this.history.clear();
         }
 
         public Square getNextSquare(List<Square> squares) {
@@ -99,6 +174,13 @@ public class Day06 {
         public void rotate() {
             direction = direction.next();
         }
+
+        public boolean dejavu() {
+            for (Guard past : history)
+                if (past.x == x && past.y == y && past.direction.equals(direction))
+                    return true;
+            return false;
+        }
     }
 
     public class Square {
@@ -115,6 +197,10 @@ public class Day06 {
 
         public void setVisited() {
             visited = true;
+        }
+
+        public boolean is(Square square) {
+            return x == square.x && y == square.y;
         }
     }
 }
