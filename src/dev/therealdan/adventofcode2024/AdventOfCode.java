@@ -8,5 +8,6 @@ public class AdventOfCode {
 
     public static void main(String[] args) throws FileNotFoundException {
         new Day08("data/day08example.txt");
+        new Day08("data/day08.txt");
     }
 }

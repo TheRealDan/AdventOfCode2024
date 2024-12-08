@@ -11,7 +11,8 @@ public class Day08 {
     public Day08(String path) throws FileNotFoundException {
         File file = new File(path);
         int part1 = part1(file);
-        System.out.println("Day 8: Part 1: " + part1);
+        int part2 = part2(file);
+        System.out.println("Day 8: Part 1: " + part1 + " Part 2: " + part2);
     }
 
     public int part1(File file) throws FileNotFoundException {
@@ -43,6 +44,45 @@ public class Day08 {
                     if (antinode.x == existingAntinode.x && antinode.y == existingAntinode.y)
                         continue nextAntenna;
                 antinodes.add(antinode);
+            }
+        }
+
+        return antinodes.size();
+    }
+
+    public int part2(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+
+        int width = 0, height = 0;
+        List<Antenna> antennas = new ArrayList<>();
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            width = 0;
+            for (String letter : line.split("")) {
+                if (!letter.equals(".")) antennas.add(new Antenna(width, height, letter));
+                width++;
+            }
+            height++;
+        }
+
+        List<Antinode> antinodes = new ArrayList<>();
+        for (Antenna antenna : antennas) {
+            for (Antenna otherAntenna : antennas) {
+                if (antenna.equals(otherAntenna)) continue;
+                if (!antenna.frequency.equals(otherAntenna.frequency)) continue;
+                int xDistance = Math.abs(antenna.x - otherAntenna.x);
+                int yDistance = Math.abs(antenna.y - otherAntenna.y);
+                nextAntinode:
+                for (int i = Math.min(-antenna.x, -antenna.y); i <= Math.max(width - antenna.x, height - antenna.y); i++) {
+                    Antinode antinode = new Antinode(
+                            antenna.x + i * (otherAntenna.x > antenna.x ? -xDistance : xDistance),
+                            antenna.y + i * (otherAntenna.y > antenna.y ? -yDistance : yDistance));
+                    if (antinode.x >= width || antinode.y >= height || antinode.x < 0 || antinode.y < 0) continue;
+                    for (Antinode existingAntinode : antinodes)
+                        if (antinode.x == existingAntinode.x && antinode.y == existingAntinode.y)
+                            continue nextAntinode;
+                    antinodes.add(antinode);
+                }
             }
         }
 
