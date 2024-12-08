@@ -37,7 +37,7 @@ public class Day07 {
             if (solve(testValue, input.replaceFirst(" ", "X+"))) return true;
             if (solve(testValue, input.replaceFirst(" ", "X*"))) return true;
         } else {
-            double value = Long.parseLong(input.split("X")[0]);
+            long value = Long.parseLong(input.split("X")[0]);
             for (String number : Arrays.stream(input.split("X")).skip(1).collect(Collectors.toList())) {
                 if (number.startsWith("+")) {
                     value += Long.parseLong(number.substring(1));
