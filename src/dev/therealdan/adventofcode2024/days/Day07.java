@@ -13,7 +13,8 @@ public class Day07 {
     public Day07(String path) throws FileNotFoundException {
         File file = new File(path);
         long part1 = part1(file);
-        System.out.println("Day 7: Part 1: " + part1);
+        long part2 = part2(file);
+        System.out.println("Day 7: Part 1: " + part1 + " Part 2: " + part2);
     }
 
     public long part1(File file) throws FileNotFoundException {
@@ -32,6 +33,22 @@ public class Day07 {
         return totalCalibrationResult;
     }
 
+    public long part2(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+
+        long totalCalibrationResult = 0;
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            Calibration calibration = new Calibration(Long.parseLong(line.split(":")[0]), Arrays.asList(line.split(": ")[1].split(" ")));
+
+            if (solve2(calibration.testValue, line.split(": ")[1])) {
+                totalCalibrationResult += calibration.testValue;
+            }
+        }
+
+        return totalCalibrationResult;
+    }
+
     public boolean solve(long testValue, String input) {
         if (input.contains(" ")) {
             if (solve(testValue, input.replaceFirst(" ", "X+"))) return true;
@@ -43,6 +60,27 @@ public class Day07 {
                     value += Long.parseLong(number.substring(1));
                 } else if (number.startsWith("*")) {
                     value *= Long.parseLong(number.substring(1));
+                }
+            }
+            return value == testValue;
+        }
+        return false;
+    }
+
+    public boolean solve2(long testValue, String input) {
+        if (input.contains(" ")) {
+            if (solve2(testValue, input.replaceFirst(" ", "X+"))) return true;
+            if (solve2(testValue, input.replaceFirst(" ", "X*"))) return true;
+            if (solve2(testValue, input.replaceFirst(" ", "X||"))) return true;
+        } else {
+            long value = Long.parseLong(input.split("X")[0]);
+            for (String number : Arrays.stream(input.split("X")).skip(1).collect(Collectors.toList())) {
+                if (number.startsWith("+")) {
+                    value += Long.parseLong(number.substring(1));
+                } else if (number.startsWith("*")) {
+                    value *= Long.parseLong(number.substring(1));
+                } else if (number.startsWith("||")) {
+                    value = Long.parseLong(value + number.substring(2));
                 }
             }
             return value == testValue;
