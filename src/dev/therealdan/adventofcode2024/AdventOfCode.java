@@ -1,12 +1,12 @@
 package dev.therealdan.adventofcode2024;
 
-import dev.therealdan.adventofcode2024.days.Day08;
+import dev.therealdan.adventofcode2024.days.Day09;
 
 import java.io.IOException;
 
 public class AdventOfCode {
 
     public static void main(String[] args) throws IOException {
-        new Day08("data/day08.txt");
+        new Day09("data/day09.txt");
     }
 }
