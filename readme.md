@@ -16,3 +16,5 @@ https://adventofcode.com/2024/about
 | 6 | [Guard Gallivant](https://adventofcode.com/2024/day/6) | [Day06.java](src/dev/therealdan/adventofcode2024/days/Day06.java) | 00:25:36 | 4924 | >24h | 52866 |
 | 7 | [Bridge Repair](https://adventofcode.com/2024/day/7) | [Day07.java](src/dev/therealdan/adventofcode2024/days/Day07.java) | >24h | 51551 | >24h | 53677 |
 | 8 | [Resonant Collinearity](https://adventofcode.com/2024/day/8) | [Day08.java](src/dev/therealdan/adventofcode2024/days/Day08.java) | 15:48:18 | 42006 | 17:03:52 | 41059 |
+| 9 | [Disk Fragmenter](https://adventofcode.com/2024/day/9) | [Day09.java](src/dev/therealdan/adventofcode2024/days/Day09.java) | 02:32:42 | 12724 | 18:16:34 | 33819 |
+| 10 | [Hoof It](https://adventofcode.com/2024/day/10) | [Day10.java](src/dev/therealdan/adventofcode2024/days/Day10.java) | 00:30:53 | 4849 | 00:42:16 | 5360 |
